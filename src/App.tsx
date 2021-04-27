@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import AdminHome from "./components/admin";
 import CustomerHome from "./components/customer";
-import Login from "./components/login/Login";
+import Login from "./components/Login";
 import jwtDecode from "jwt-decode";
 import JWTStructure from "./models/JWTStructure";
 import useToken from "./components/useToken";
@@ -26,7 +26,7 @@ function App() {
             return (
                 <div className={"w-100"}>
                     <div className={"col-md-6 mx-auto pb-1"}>
-                        <Navbar className={"bg-dark w-100 pr-1"}>
+                        <Navbar className={"bg-dark w-100 pr-1 rounded-bottom"}>
                             <NavbarBrand className={"text-white mr-auto"}>
                                 {isAdmin ? <span>Admin Area</span> : <span>Customer Area</span>}
                             </NavbarBrand>
@@ -42,7 +42,7 @@ function App() {
 
                         {
                             <BrowserRouter>
-                                <Route path={"/"}>
+                                <Route exact path={"/"}>
                                     {(user.role === "admin") ? <Redirect to={"/admin"}/> : <Redirect to={"/customer"}/>}
                                 </Route>
                                 <Switch>

@@ -1,6 +1,6 @@
 import {Alert} from "bootstrap-react";
 import React, {useState} from "react";
-import {doLogin} from "../../services/userLogin";
+import {doLogin} from "../services/userLogin";
 
 const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
     const [email, setEmail] = useState<string>();
@@ -31,7 +31,7 @@ const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
     }
     return (
         <div className={"m-5"}>
-            <div className={"shadow p-5 mx-auto col-md-6"}>
+            <div className={"shadow p-5 mx-auto col-md-6 shadow-sm"}>
                 <h1 className={"text-center"}>Login</h1>
                 {
                     props.tokenExpired &&
@@ -39,7 +39,7 @@ const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
                 }
                 {
                     alertVisibility &&
-                    <Alert dismissable={true} onDismiss={(v) => setAlertVisibility(false)}
+                    <Alert dismissable={true} onDismiss={(_) => setAlertVisibility(false)}
                            className={"my-4"}>{message}</Alert>
                 }
                 <form onSubmit={logInHandler}>
