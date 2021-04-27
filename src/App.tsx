@@ -16,6 +16,7 @@ function App() {
     else {
         let decoded = jwtDecode<JWTStructure>(token);
         if (isExpired(decoded)) {
+            localStorage.removeItem('user');
             return <Login tokenExpired={true} setToken={setToken}/>;
         } else {
             let user = decoded.user;

@@ -1,22 +1,6 @@
 import {Alert} from "bootstrap-react";
 import React, {useState} from "react";
-
-async function doLogin(email: string, password: string) {
-    let resp = await fetch(`/api/users/login.php`, {
-        method: 'POST',
-        headers: {
-            "Access-Control-Request-Headers": "Access-Control-Request-Method,Access-Control-Allow-Headers,Origin,Content-Type,access_token,Access-Control-Request-Headers",
-            "Access-Control-Request-Method": "POST",
-            "Content-type": "application/json; charset=utf-8"
-        },
-        body: JSON.stringify({"email": email, "password": password}),
-        mode: "cors"
-    });
-    if (!resp.ok) {
-        console.log(resp.statusText);
-    }
-    return resp.json();
-}
+import {doLogin} from "../../services/userLogin";
 
 const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
     const [email, setEmail] = useState<string>();
@@ -24,15 +8,25 @@ const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
     const [emptyEmail, setEmptyEmail] = useState<boolean>(false);
     const [emptyPassword, setEmptyPassword] = useState<boolean>(false);
     const [alertVisibility, setAlertVisibility] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
 
     const logInHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         setEmptyEmail(!email);
         setEmptyPassword(!password);
         if (email && password) {
-            let loginResponse = await doLogin(email, password);
-            if ('access_token' in loginResponse) props.setToken(loginResponse['access_token']);
-            else setAlertVisibility(true);
+            try {
+                let loginResponse = await doLogin(email, password);
+                if ('access_token' in loginResponse) props.setToken(loginResponse['access_token']);
+                else {
+                    setMessage(loginResponse['message']);
+                    setAlertVisibility(true);
+                }
+            } catch (e) {
+                setMessage(e.message);
+                setAlertVisibility(true);
+                console.log(e.message);
+            }
         }
     }
     return (
@@ -46,7 +40,7 @@ const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
                 {
                     alertVisibility &&
                     <Alert dismissable={true} onDismiss={(v) => setAlertVisibility(false)}
-                           className={"my-4"}>Login Failed! Invalid email or password</Alert>
+                           className={"my-4"}>{message}</Alert>
                 }
                 <form onSubmit={logInHandler}>
                     <div className={"form-group"}>
