@@ -8,6 +8,7 @@ import JWTStructure from "./models/JWTStructure";
 import useToken from "./components/useToken";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {Redirect} from 'react-router';
+import {Navbar, NavbarBrand, NavbarText, NavLink} from "bootstrap-react";
 
 function App() {
     const {token, setToken} = useToken();
@@ -20,10 +21,25 @@ function App() {
             return <Login tokenExpired={true} setToken={setToken}/>;
         } else {
             let user = decoded.user;
+            let isAdmin = user.role === "admin";
             localStorage.setItem('user', JSON.stringify(user));
             return (
-                <div className={"container row"}>
-                    <div className={"col-md-6 mx-auto p-5"}>
+                <div className={"w-100"}>
+                    <div className={"col-md-6 mx-auto pb-1"}>
+                        <Navbar className={"bg-dark w-100 pr-1"}>
+                            <NavbarBrand className={"text-white mr-auto"}>
+                                {isAdmin ? <span>Admin Area</span> : <span>Customer Area</span>}
+                            </NavbarBrand>
+                            <NavbarText className={"text-white font-weight-bolder d-block"}>
+                                {user.name}
+                            </NavbarText>
+                            <NavLink className={"text-white-50"} href={"/"} onClick={(e) => {
+                                e.preventDefault();
+                                setToken("");
+                                localStorage.removeItem('user');
+                            }}><small>Logout</small></NavLink>
+                        </Navbar>
+
                         {
                             <BrowserRouter>
                                 <Route path={"/"}>
