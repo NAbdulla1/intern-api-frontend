@@ -51,14 +51,15 @@ const ProductItem = (props: {
                     <div className={"col-1 flex-column my-auto"}>
                         <span style={{cursor: "pointer"}} onClick={(event) => {
                             event.preventDefault();
-                            props.deleteProduct(props.product.sku);
+                            if (window.confirm("Are you sure to delete this product?")) {
+                                props.deleteProduct(props.product.sku);
+                            }
                         }} className={'material-icons'}>
                             delete
                         </span>
                         <span style={{cursor: "pointer"}} onClick={(e) => {
                             e.preventDefault();
                             setShowProductUpdateModal(true);
-                            //call update product function
                         }} className={'material-icons'}>
                             update
                         </span>
