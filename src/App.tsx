@@ -23,6 +23,7 @@ function App() {
             let user = decoded.user;
             let isAdmin = user.role === "admin";
             localStorage.setItem('user', JSON.stringify(user));
+            const path = window.location.pathname;
             return (
                 <div className={"w-100"}>
                     <div className={"col-md-6 mx-auto pb-1"}>
@@ -39,23 +40,20 @@ function App() {
                                 localStorage.removeItem('user');
                             }}><small>Logout</small></NavLink>
                         </Navbar>
-
                         {
                             <BrowserRouter>
-                                <Route exact path={"/"}>
-                                    {(user.role === "admin") ? <Redirect to={"/admin"}/> : <Redirect to={"/customer"}/>}
-                                </Route>
                                 <Switch>
                                     <Route path={"/admin"}>
                                         <AdminHome/>
-                                        {(user.role === "admin") ? <Redirect to={"/admin"}/> :
-                                            <Redirect to={"/customer"}/>}
                                     </Route>
                                     <Route path={"/customer"}>
                                         <CustomerHome/>
-                                        {(user.role === "admin") ? <Redirect to={"/admin"}/> :
-                                            <Redirect to={"/customer"}/>}
                                     </Route>
+                                    {
+                                        (path === "/") ?
+                                            (<Redirect to={isAdmin ? '/admin' : '/customer'}/>)
+                                            : <Redirect to={path}/>
+                                    }
                                 </Switch>
                             </BrowserRouter>
                         }
