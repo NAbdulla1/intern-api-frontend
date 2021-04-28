@@ -1,5 +1,5 @@
 import Product from "../models/Product";
-import ProductUpdateModal from "./ProductUpdateModal";
+import ProductCreateUpdateModal from "./ProductCreateUpdateModal";
 import React, {useState} from "react";
 import getUser from "../user_and_token/GetUser";
 import {createOrder} from "../services/createOrder";
@@ -23,8 +23,8 @@ const ProductItem = (props: {
 
     return (
         <>
-            <ProductUpdateModal prod={props.product} show={showProductUpdateModal} setShow={setShowProductUpdateModal}
-                                createOrUpdateProduct={props.updProdListener} isUpdate={true}/>
+            <ProductCreateUpdateModal prod={props.product} show={showProductUpdateModal} setShow={setShowProductUpdateModal}
+                                      createOrUpdateProduct={props.updProdListener} isUpdate={true}/>
             <div className={"row mx-1 my-2 border-secondary border rounded"}>
                 <div className={"col-3 p-0 m-auto"}>
                     <img src={props.product.imageUrl} className={'w-100'} alt="product"/>

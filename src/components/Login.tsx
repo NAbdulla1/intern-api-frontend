@@ -25,7 +25,6 @@ const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
             } catch (e) {
                 setMessage(e.message);
                 setAlertVisibility(true);
-                console.log(e.message);
             }
         }
     }

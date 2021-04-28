@@ -4,7 +4,7 @@ import {getProducts} from "../services/getProducts";
 import {Alert, Button} from "bootstrap-react";
 import ProductItem from "./ProductItem";
 import {deleteProductService} from "../services/deleteProduct";
-import ProductUpdateModal from "./ProductUpdateModal";
+import ProductCreateUpdateModal from "./ProductCreateUpdateModal";
 import getUser from "../user_and_token/GetUser";
 
 const ProductList = () => {
@@ -53,9 +53,9 @@ const ProductList = () => {
 
     return (
         <div>
-            <ProductUpdateModal prod={new Product("", "", "", "", 0, "")} show={showAddProductModal}
-                                setShow={setShowAddProductModal} createOrUpdateProduct={addProductListener}
-                                isUpdate={false}/>
+            <ProductCreateUpdateModal prod={new Product("", "", "", "", 0, "")} show={showAddProductModal}
+                                      setShow={setShowAddProductModal} createOrUpdateProduct={addProductListener}
+                                      isUpdate={false}/>
             {
                 error.length > 0 ? <Alert className={'my-2'} onDismiss={() => setError("")}
                                           dismissable={true} color={"danger"}>{error}</Alert> : ""

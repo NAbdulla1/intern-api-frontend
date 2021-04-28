@@ -24,7 +24,7 @@ function App() {
             let isAdmin = user.role === "admin";
             localStorage.setItem('user', JSON.stringify(user));
             const path = window.location.pathname;
-            console.log(path);
+
             return (
                 <div className={"w-100"}>
                     <div className={"col-md-6 mx-auto pb-1"}>

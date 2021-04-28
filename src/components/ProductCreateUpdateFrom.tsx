@@ -9,8 +9,7 @@ import {createProductService} from "../services/createProduct";
 
 
 const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, closeModal: Function, createOrUpdateProductCallBack: Function }) => {
-    let product = new Product("", "", "", "", 0, "");
-    product = props.product;
+    let product = props.product;
     const [name, setName] = useState(product.name);
     const [sku, setSku] = useState(product.sku);
     const [description, setDescription] = useState(product.description);
@@ -35,43 +34,45 @@ const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, c
     function updateProduct(nProduct: Product) {
         updateProductService(nProduct)
             .then(json => {
-                    const updProd = [json].map((prodjson: any) => prodjson)[0];
-                    props.createOrUpdateProductCallBack(updProd);
-                    setSuccess("Product Update Successful");
-                    setTimeout(() => props.closeModal(), 1000);
-                }
-            ).catch(r => {
-                setError(`Product Update failed ${r['message']}`)
-            }
-        );
+                const updProd: Product = [json].map((updProductJson: any) => updProductJson)[0];
+                props.createOrUpdateProductCallBack(updProd);
+                setSuccess("Product Update Successful");
+                setTimeout(() => props.closeModal(), 1000);
+                setSubmitting(false);
+            })
+            .catch(r => {
+                setError(`Product Update failed ${r['message']}`);
+                setSubmitting(false);
+            });
     }
 
     function createProduct(imageFormData: FormData, nProduct: Product) {
         uploadImageService(imageFormData)
             .then((json) => {
-                    console.log(json);
                     if ('path' in json) {
                         nProduct.imageUrl = json['path'];
                         createProductService(nProduct)
                             .then(json => {
-                                    const updProd = [json].map((prodjson: any) => prodjson)[0];
-                                    props.createOrUpdateProductCallBack(updProd);
-                                    setSuccess("Product Created Successfully");
-                                    setTimeout(() => props.closeModal(), 2 * 500);
-                                }
-                            ).catch(r => {
-                                deleteImageService(nProduct.imageUrl);
+                                const newProduct: Product = [json].map((newProductJson: any) => newProductJson)[0];
+                                props.createOrUpdateProductCallBack(newProduct);
+                                setSuccess("Product Created Successfully");
+                                setTimeout(() => props.closeModal(), 1000);
+                                setSubmitting(false);
+                            })
+                            .catch(r => {
+                                deleteImageService(nProduct.imageUrl).then(_ => console.log('deleting uploaded image as product creation failed'));
                                 setError(`Product Creation failed ${r['message']}`);
-                            }
-                        )
-                    }
-                    return json;
-                }
-            ).catch(reason => {
-                console.log(reason);
-                setError(`Product Creation failed due to image update failed`)
-            }
-        );
+                                setSubmitting(false);
+                            });
+                    } else
+                        throw new Error("Image Upload Failed");
+                setSubmitting(false);
+                return json;
+            })
+            .catch(reason => {
+                setError(`Product Creation failed due to image update failed, ${reason['message']}`);
+                setSubmitting(false);
+            });
     }
 
     const handleFormSubmit = (e: React.FormEvent) => {
@@ -81,27 +82,28 @@ const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, c
             setError(errorMsg);
             return;
         }
+        setSubmitting(true);
         const nProduct = new Product(name, sku, description, category, parseFloat(price), product.imageUrl);
-        console.log(props.isUpdate);
+
         if (props.isUpdate) {
             if (image != null) {
                 const imageFormData = new FormData();
                 imageFormData.append('product_image', image, image.name);
                 uploadImageService(imageFormData)
                     .then((json) => {
-                            console.log(json);
-                            deleteImageService(product.imageUrl).then(r => console.log(r));
-                            if ('path' in json) {
-                                nProduct.imageUrl = json['path'];
-                                updateProduct(nProduct);
-                            }
-                            return json;
-                        }
-                    ).catch(reason => {
-                        console.log(reason);
-                        setError("Product Update failed due to image update failed")
-                    }
-                );
+                        if ('path' in json) {
+                            deleteImageService(product.imageUrl).then(_ => console.log("new image uploaded successfully, let's delete old image"));
+                            nProduct.imageUrl = json['path'];
+                            updateProduct(nProduct);
+                        } else
+                            throw new Error("Image Update Failed");
+                        setSubmitting(false);
+                        return json;
+                    })
+                    .catch(reason => {
+                        setError(`Product Update failed due to image update failed, ${reason['message']}`);
+                        setSubmitting(false);
+                    });
             } else {
                 updateProduct(nProduct);
             }
@@ -123,50 +125,54 @@ const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, c
             <Alert color={"warning"} dismissable={true} onDismiss={() => setError("")}>{error}</Alert>}
 
             <form onSubmit={handleFormSubmit}>
-                <div className={"form-group"}>
-                    <label>Product Name</label>
-                    <input name={"name"} required minLength={1} maxLength={50} type={'text'} className={'form-control'}
-                           value={name}
-                           onChange={event => setName(event.target.value)}/>
-                </div>
-                {!props.isUpdate &&
-                <div className={"form-group"}>
-                    <label>Product SKU (Must Be Unique)</label>
-                    <input name={'sku'} required minLength={1} maxLength={20} type={'text'} className={'form-control'}
-                           value={sku}
-                           onChange={event => setSku(event.target.value)}/>
-                </div>
-                }
-                <div className={"form-group"}>
-                    <label>Product Description</label>
-                    <input name={"description"} required minLength={1} maxLength={500} type={'text'}
-                           className={'form-control'} value={description}
-                           onChange={event => setDescription(event.target.value)}/>
-                </div>
-                <div className={"form-group"}>
-                    <label>Product Category</label>
-                    <input name={'category'} required minLength={1} maxLength={20} type={'text'}
-                           className={'form-control'}
-                           value={category}
-                           onChange={event => setCategory(event.target.value)}/>
-                </div>
-                <div className={"form-group"}>
-                    <label>Product Price</label>
-                    <input name={'price'} required step={0.001} type={'number'} className={'form-control-range'}
-                           value={price}
-                           onChange={event => setPrice(event.target.value)}/>
-                </div>
-                <div className={"form-group"}>
-                    <label>Product Image</label>
-                    {props.isUpdate ?
-                        <input name={'image-file'} type={'file'} className={'form-control-file'} id={'image-file'}
-                               onChange={event => setImage(event.target.files ? event.target.files[0] : null)}/>
-                        : <input required name={'image-file'} type={'file'} className={'form-control-file'}
-                                 id={'image-file'}
-                                 onChange={event => setImage(event.target.files ? event.target.files[0] : null)}/>}
-                </div>
-                <button className={'btn btn-primary w-100'}
-                        type={"submit"}>{props.isUpdate ? "Update Product" : "Create Product"}</button>
+                <fieldset disabled={submitting}>
+                    <div className={"form-group"}>
+                        <label>Product Name</label>
+                        <input name={"name"} required minLength={1} maxLength={50} type={'text'}
+                               className={'form-control'}
+                               value={name}
+                               onChange={event => setName(event.target.value)}/>
+                    </div>
+                    {!props.isUpdate &&
+                    <div className={"form-group"}>
+                        <label>Product SKU (Must Be Unique)</label>
+                        <input name={'sku'} required minLength={1} maxLength={20} type={'text'}
+                               className={'form-control'}
+                               value={sku}
+                               onChange={event => setSku(event.target.value)}/>
+                    </div>
+                    }
+                    <div className={"form-group"}>
+                        <label>Product Description</label>
+                        <input name={"description"} required minLength={1} maxLength={500} type={'text'}
+                               className={'form-control'} value={description}
+                               onChange={event => setDescription(event.target.value)}/>
+                    </div>
+                    <div className={"form-group"}>
+                        <label>Product Category</label>
+                        <input name={'category'} required minLength={1} maxLength={20} type={'text'}
+                               className={'form-control'}
+                               value={category}
+                               onChange={event => setCategory(event.target.value)}/>
+                    </div>
+                    <div className={"form-group"}>
+                        <label>Product Price</label>
+                        <input name={'price'} required step={0.001} type={'number'} className={'form-control-range'}
+                               value={price}
+                               onChange={event => setPrice(event.target.value)}/>
+                    </div>
+                    <div className={"form-group"}>
+                        <label>Product Image</label>
+                        {props.isUpdate ?
+                            <input name={'image-file'} type={'file'} className={'form-control-file'} id={'image-file'}
+                                   onChange={event => setImage(event.target.files ? event.target.files[0] : null)}/>
+                            : <input required name={'image-file'} type={'file'} className={'form-control-file'}
+                                     id={'image-file'}
+                                     onChange={event => setImage(event.target.files ? event.target.files[0] : null)}/>}
+                    </div>
+                    <button className={'btn btn-primary w-100'}
+                            type={"submit"}>{props.isUpdate ? "Update Product" : "Create Product"}</button>
+                </fieldset>
             </form>
         </div>
     );

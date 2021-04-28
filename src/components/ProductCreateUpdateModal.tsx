@@ -3,7 +3,7 @@ import Product from "../models/Product";
 import React from "react";
 import ProductCreateUpdateForm from "./ProductCreateUpdateFrom";
 
-const ProductUpdateModal = (props: {
+const ProductCreateUpdateModal = (props: {
     prod: Product,
     show: boolean,
     setShow: React.Dispatch<React.SetStateAction<boolean>>,
@@ -12,13 +12,13 @@ const ProductUpdateModal = (props: {
 }) => {
 
     const handleClose = () => props.setShow(false);
-    const handleShow = () => props.setShow(true);
 
     return (
         <>
             <Modal
                 visible={props.show}
                 onDismiss={handleClose}
+
             >
                 <ModalHeader>
                     <ModalTitle>Update Product</ModalTitle>
@@ -35,4 +35,4 @@ const ProductUpdateModal = (props: {
     );
 }
 
-export default ProductUpdateModal;
+export default ProductCreateUpdateModal;
