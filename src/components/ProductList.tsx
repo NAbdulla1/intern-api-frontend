@@ -5,6 +5,7 @@ import {Alert, Button} from "bootstrap-react";
 import ProductItem from "./ProductItem";
 import {deleteProductService} from "../services/deleteProduct";
 import ProductUpdateModal from "./ProductUpdateModal";
+import getUser from "../GetUser";
 
 const ProductList = () => {
     const [productList, setProductList] = useState<Product[]>();
@@ -59,12 +60,16 @@ const ProductList = () => {
                 error.length > 0 ? <Alert className={'my-2'} onDismiss={() => setError("")}
                                           dismissable={true} color={"danger"}>{error}</Alert> : ""
             }
+            {getUser()?.role === 'admin' &&
             <Button onClick={() => setShowAddProductModal(true)} className={'mt-1 d-flex justify-content'}><span
-                className={'material-icons'}>add</span> Add Product</Button>
+                className={'material-icons'}>add</span> Add Product</Button>}
             {
                 productList !== undefined ? productList.map((product, index) =>
-                        <ProductItem key={index} deleteProduct={deleteProduct} product={product}
-                                     updProdListener={productUpdateListener}/>)
+                        <ProductItem key={index}
+                                     deleteProduct={deleteProduct}
+                                     product={product}
+                                     updProdListener={productUpdateListener}
+                                     setError={setError}/>)
                     : <Alert color={"info"}>No Product to be shown</Alert>
             }
         </div>
