@@ -1,4 +1,4 @@
-import User from "./models/User";
+import User from "../models/User";
 
 function getUser() {
     const userJson = localStorage.getItem('user');

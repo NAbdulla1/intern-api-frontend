@@ -3,7 +3,7 @@ import {getOrders} from "../services/getOrders";
 import Order from "../models/Order";
 import OrderItem from "./OrderItem";
 import {Alert} from "bootstrap-react";
-import getUser from "../GetUser";
+import getUser from "../user_and_token/GetUser";
 
 const OrderList = () => {
     const [orderList, setOrderList] = useState<Order[]>();

@@ -1,6 +1,6 @@
 import ProductList from "./ProductList";
 import {Route, Switch} from "react-router-dom";
-import getUser from '../GetUser';
+import getUser from '../user_and_token/GetUser';
 import OrderList from "./OrderList";
 import {Alert} from "bootstrap-react";
 

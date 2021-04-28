@@ -1,4 +1,4 @@
-import getUser from "../GetUser";
+import getUser from "../user_and_token/GetUser";
 import {Route, Switch} from "react-router-dom";
 import ProductList from "./ProductList";
 import OrderList from "./OrderList";

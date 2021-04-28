@@ -1,4 +1,4 @@
-import handlePromiseRejected from "../PromiseRejectedHandler";
+import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 
 export function doLogin(email: string, password: string) {
     return fetch(`/api/users/login.php`, {

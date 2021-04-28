@@ -5,7 +5,7 @@ import CustomerHome from "./components/customer";
 import Login from "./components/Login";
 import jwtDecode from "jwt-decode";
 import JWTStructure from "./models/JWTStructure";
-import useToken from "./components/useToken";
+import useToken from "./user_and_token/useToken";
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {Redirect} from 'react-router';
 import {Navbar, NavbarBrand, NavbarText, NavLink} from "bootstrap-react";

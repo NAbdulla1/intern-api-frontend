@@ -1,5 +1,5 @@
 import Order from "../models/Order";
-import getUser from "../GetUser";
+import getUser from "../user_and_token/GetUser";
 import React, {useEffect, useState} from "react";
 import Product from "../models/Product";
 import {getSingleProductService} from "../services/getSingleProduct";

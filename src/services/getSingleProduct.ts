@@ -1,5 +1,5 @@
-import handlePromiseRejected from "../PromiseRejectedHandler";
-import getStoredToken from "../GetToken";
+import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
+import getStoredToken from "../user_and_token/GetToken";
 
 export function getSingleProductService(sku: string) {
     return fetch(`/api/products/get-one.php?sku=${sku}`, {

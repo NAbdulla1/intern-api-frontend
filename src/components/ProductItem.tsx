@@ -1,7 +1,7 @@
 import Product from "../models/Product";
 import ProductUpdateModal from "./ProductUpdateModal";
 import React, {useState} from "react";
-import getUser from "../GetUser";
+import getUser from "../user_and_token/GetUser";
 import {createOrder} from "../services/createOrder";
 
 const ProductItem = (props: {

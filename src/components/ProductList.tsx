@@ -5,7 +5,7 @@ import {Alert, Button} from "bootstrap-react";
 import ProductItem from "./ProductItem";
 import {deleteProductService} from "../services/deleteProduct";
 import ProductUpdateModal from "./ProductUpdateModal";
-import getUser from "../GetUser";
+import getUser from "../user_and_token/GetUser";
 
 const ProductList = () => {
     const [productList, setProductList] = useState<Product[]>();

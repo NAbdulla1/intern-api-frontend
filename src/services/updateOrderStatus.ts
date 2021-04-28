@@ -1,5 +1,5 @@
-import handlePromiseRejected from "../PromiseRejectedHandler";
-import getStoredToken from "../GetToken";
+import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
+import getStoredToken from "../user_and_token/GetToken";
 
 export function updateOrderStatus(id: number, status: string) {
     return fetch(`/api/orders/update.php`, {
