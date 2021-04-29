@@ -30,21 +30,22 @@ const ProductItemInAdmin = (props: {
                         </p>
                 }</td>
                 <td><img src={props.product.imageUrl} style={{width: '9vw', padding: '1vw'}} alt="product"/></td>
-                <td>
-                    <span style={{cursor: "pointer"}} onClick={(event) => {
+                <td className={'position-relative'}>
+                    <div className={'d-flex flex-column align-items-center justify-content-center'}
+                         style={{position: 'absolute', top: '0', bottom: '0', left:'0', right:'0'}}>
+                    <span style={{cursor: "pointer", marginBottom: '.5rem'}} onClick={(event) => {
                         event.preventDefault();
-                        if (window.confirm("Are you sure to delete this product?")) {
-                            props.deleteProduct(props.product.sku);
-                        }
+                        if (window.confirm("Are you sure to delete this product?")) props.deleteProduct(props.product.sku);
                     }} className={'material-icons'}>
                         delete
                     </span>
-                    <span style={{cursor: "pointer"}} onClick={(e) => {
-                        e.preventDefault();
-                        setShowProductUpdateModal(true);
-                    }} className={'material-icons'}>
+                        <span style={{cursor: "pointer", marginTop: '.5rem'}} onClick={(e) => {
+                            e.preventDefault();
+                            setShowProductUpdateModal(true);
+                        }} className={'material-icons'}>
                             update
                     </span>
+                    </div>
                     <ProductCreateUpdateModal prod={props.product} show={showProductUpdateModal}
                                               setShow={setShowProductUpdateModal}
                                               createOrUpdateProduct={props.updProdListener} isUpdate={true}/>

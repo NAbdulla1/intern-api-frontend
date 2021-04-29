@@ -11,7 +11,7 @@ export class ProductTable extends Component<{ products: Product[], callbackfn: (
                 <th scope="col">Category</th>
                 <th scope="col">Description</th>
                 <th scope="col">Image</th>
-                <th scope="col" className={"material-icons"}>settings</th>
+                <th scope="col" className={'text-center'}><span className={"material-icons"}>settings</span></th>
             </tr>
             </thead>
             <tbody>{
