@@ -155,7 +155,16 @@ const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, c
                         <div className={'ml-2 mr-3'}>
                             <DynamicSelect placeholder={'Select Category'} disabled={undefined}
                                            value={props.isUpdate ? new CategoryOption(product.category, product.category) : undefined}
-                                           changeListener={(newVal: string) => setCategory(newVal)}/>
+                                           changeListener={(newVal: string) => {
+                                               if ((typeof newVal) !== "string") {
+                                                   try {
+                                                       newVal = newVal[0];
+                                                       setCategory(newVal)
+                                                   } catch (e) {
+                                                       setError(e['message']);
+                                                   }
+                                               } else setCategory(newVal);
+                                           }}/>
                         </div>
                     </div>
                     <div className={"form-group"}>
