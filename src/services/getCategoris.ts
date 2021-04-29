@@ -1,6 +1,5 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
-import URLParameter from "../models/URLParameter";
 
 export function getCategoriesLike(pattern: string) {
     return fetch(`/api/products/category.php?pattern=${pattern}`, {
