@@ -8,6 +8,7 @@ import ProductCreateUpdateModal from "./ProductCreateUpdateModal";
 import getUser from "../user_and_token/GetUser";
 import URLParameter from "../models/URLParameter";
 import Filters from "./Filters";
+import usePageSize from "../usePageSize";
 
 const ProductList = () => {
     const [productList, setProductList] = useState<Product[]>();
@@ -17,8 +18,8 @@ const ProductList = () => {
     const [priceHighFilter, setPriceHighFilter] = useState<number>(1000000000000000.0);
     const [categoryFilter, setCategoryFilter] = useState<string>("");
     const [pageFilter, setPageFilter] = useState<number>(1);
-    const [pageSizeFilter, setPageSizeFilter] = useState<number>(10);
     const [filtering, setFiltering] = useState<boolean>(false);
+    const {pageSize: pageSizeFilter, setPageSize: setPageSizeFilter} = usePageSize(10);
 
     function buildParams() {
         const params: URLParameter[] = [];
@@ -78,7 +79,7 @@ const ProductList = () => {
                                        dismissable={true} color={"danger"}>{error}</Alert> : ""}
 
             <Filters filtering={filtering} slpf={setPriceLowFilter} shpf={setPriceHighFilter}
-                     spsf={setPageSizeFilter} scf={setCategoryFilter}/>
+                     spsf={setPageSizeFilter} scf={setCategoryFilter} pageSize={pageSizeFilter}/>
 
             {getUser()?.role === 'admin' && <div className={'row justify-content-end pr-3 pl-1 align-items-center'}>
                 <Button style={{maxWidth: '20%'}} onClick={() => setShowAddProductModal(true)}
@@ -88,14 +89,41 @@ const ProductList = () => {
             </div>}
 
             {
-                productList !== undefined ? productList.map((product, index) =>
+                productList !== undefined && productList.length !== 0 ? productList.map((product, index) =>
                         <ProductItem key={index}
                                      deleteProduct={deleteProduct}
                                      product={product}
                                      updProdListener={productUpdateListener}
                                      setError={setError}/>)
-                    : <Alert color={"info"}>No Product to be shown</Alert>
+                    : <Alert className={'my-3'} color={"info"}>No Product to be shown</Alert>
             }
+            <nav>
+                <ul className="pagination justify-content-center">
+                    <li className={(pageFilter > 1) ? "page-item" : "page-item disabled"}>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setPageFilter(Math.max(1, pageFilter - 1))
+                            }}
+                            className="page-link"
+                            href="#"
+                            tabIndex={(pageFilter <= 1) ? -1 : undefined}>Previous</a>
+                    </li>
+                    <li className="page-item active">
+                        <a onClick={(e) => e.preventDefault()} className="page-link" href="#">{pageFilter}</a>
+                    </li>
+                    <li className={(productList === undefined || productList.length === 0 || productList.length < pageSizeFilter) ? "page-item disabled" : "page-item"}>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setPageFilter(pageFilter + 1)
+                            }}
+                            className="page-link"
+                            href="#"
+                            tabIndex={(productList === undefined || productList.length === 0 || productList.length < pageSizeFilter) ? -1 : undefined}>Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     )
 }
