@@ -5,17 +5,8 @@ import OrderList from "./OrderList";
 import {Alert, Navbar, NavbarBrand, NavbarText, NavLink} from "bootstrap-react";
 import React from "react";
 import useToken from "../custom_hooks/useToken";
-
-class LeftPanelLink extends React.Component {
-    render() {
-        return <li className="px-2 list-group-item border-right-0 bg-dark">
-            <a href="#" className="text-light d-flex align-bottom">
-                <span className="material-icons mr-1">article</span>
-                <span className="d-none d-sm-inline">Blog Posts</span>
-            </a>
-        </li>;
-    }
-}
+import LeftPanelLink from "./LeftPanelLink";
+import UserList from "./UserList";
 
 const AdminHome = () => {
     const path = window.location.pathname;
@@ -30,14 +21,6 @@ const AdminHome = () => {
                             <NavbarBrand className={"text-white mr-auto"}>
                                 <span>Admin Area</span>
                             </NavbarBrand>
-                            {
-                                <>
-                                    <NavLink href={'/admin/products'}
-                                             className={path.includes('products') || path === '/admin' ? 'text-white' : 'text-white-50'}>Products</NavLink>
-                                    <NavLink href={'/admin/orders'}
-                                             className={path.includes('orders') ? 'text-white' : 'text-white-50'}>Orders</NavLink>
-                                </>
-                            }
                             <NavbarText className={"text-white font-weight-bolder d-block px-3"}>
                                 {userName ? userName : 'Unknown'}
                             </NavbarText>
@@ -46,22 +29,25 @@ const AdminHome = () => {
                                 localStorage.removeItem('user');
                             }}><small>Logout</small></NavLink>
                         </Navbar>
-                        <div className={'row'}>
-                            <div className={'col-md-3 col-2 p-2 p-md-4'}>
-                                <ul className="list-group p-0">
-                                    <LeftPanelLink/>
-                                    <LeftPanelLink/>
-                                    <LeftPanelLink/>
-                                    <LeftPanelLink/>
-                                </ul>
+
+                        <div className={'row mt-2'}>
+                            <div className={'col-md-3 col-2 p-2 p-md-4'} style={{position: 'sticky', top: 10}}>
+                                <div className="list-group">
+                                    <LeftPanelLink href={'/admin/products'} text={'Products'} icon={'inventory_2'}/>
+                                    <LeftPanelLink href={'/admin/orders'} text={'Orders'} icon={'local_mall'}/>
+                                    <LeftPanelLink href={'/admin/users'} text={'Users'} icon={'people'}/>
+                                </div>
                             </div>
-                            <div className={'col-md-7 col-10 p-lg-4'}>
+                            <div className={'col-md-7 col-10 p-2 p-md-4'}>
                                 <Switch>
                                     <Route path={"/admin/products"}>
                                         <ProductList/>
                                     </Route>
                                     <Route path={"/admin/orders"}>
                                         <OrderList/>
+                                    </Route>
+                                    <Route path={"/admin/users"}>
+                                        <UserList/>
                                     </Route>
                                     <Route path={"/admin"}>
                                         <ProductList/>
