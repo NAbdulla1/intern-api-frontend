@@ -2,13 +2,15 @@ import Product from "../models/Product";
 import {useEffect, useState} from "react";
 import {getProducts} from "../services/getProducts";
 import {Alert, Button} from "bootstrap-react";
-import ProductItem from "./ProductItem";
+import ProductItemInCustomer from "./ProductItemInCustomer";
 import {deleteProductService} from "../services/deleteProduct";
 import ProductCreateUpdateModal from "./ProductCreateUpdateModal";
 import getUser from "../user_and_token/GetUser";
 import URLParameter from "../models/URLParameter";
 import Filters from "./Filters";
 import usePageSize from "../custom_hooks/usePageSize";
+import ProductItemInAdmin from "./ProductItemInAdmin";
+import {ProductTable} from "./ProductTable";
 
 const ProductList = () => {
     const [productList, setProductList] = useState<Product[]>();
@@ -72,31 +74,45 @@ const ProductList = () => {
 
     return (
         <div>
+            <h2 className={'text-center'}>Products</h2>
             <ProductCreateUpdateModal prod={new Product("", "", "", "", 0, "")} show={showAddProductModal}
                                       setShow={setShowAddProductModal} createOrUpdateProduct={addProductListener}
                                       isUpdate={false}/>
-            {error.length > 0 ? <Alert className={'my-2'} onDismiss={() => setError("")}
-                                       dismissable={true} color={"danger"}>{error}</Alert> : ""}
 
             <Filters filtering={filtering} slpf={setPriceLowFilter} shpf={setPriceHighFilter}
                      spsf={setPageSizeFilter} scf={setCategoryFilter} pageSize={pageSizeFilter}/>
 
-            {getUser()?.role === 'admin' && <div className={'row justify-content-end pr-3 pl-1 align-items-center'}>
-                <Button style={{maxWidth: '20%'}} onClick={() => setShowAddProductModal(true)}
-                        className={'btn-sm d-inline-flex align-items-center'}>
-                    <span className={'material-icons'}>add</span> Add Product
-                </Button>
-            </div>}
+            {error.length > 0 ? <Alert className={'my-2'} onDismiss={() => setError("")}
+                                       dismissable={true} color={"danger"}>{error}</Alert> : ""}
+
+            {getUser()?.role === 'admin' &&
+            <Button style={{maxWidth: '20%', float:'right'}} onClick={() => setShowAddProductModal(true)}
+                    className={'btn-sm d-inline-flex align-items-center'}>
+                <span className={'material-icons'}>add</span> Add Product
+            </Button>
+            }
+            <div className={'clearfix'}/>
 
             {
-                productList !== undefined && productList.length !== 0 ? productList.map((product, index) =>
-                        <ProductItem key={index}
-                                     deleteProduct={deleteProduct}
-                                     product={product}
-                                     updProdListener={productUpdateListener}
-                                     setError={setError}/>)
+                productList !== undefined && productList.length !== 0
+                    ?
+                    (getUser()?.role !== 'admin'
+                            ? productList.map((product, index) =>
+                                <ProductItemInCustomer key={index}
+                                                       deleteProduct={deleteProduct}
+                                                       product={product}
+                                                       updProdListener={productUpdateListener}
+                                                       setError={setError}/>)
+                            : <ProductTable products={productList} callbackfn={(product, index) =>
+                                <ProductItemInAdmin key={index}
+                                                    deleteProduct={deleteProduct}
+                                                    product={product}
+                                                    updProdListener={productUpdateListener}
+                                                    setError={setError}/>}/>
+                    )
                     : <Alert className={'my-3'} color={"info"}>No Product to be shown</Alert>
             }
+
             <nav>
                 <ul className="pagination justify-content-center">
                     <li className={(pageFilter > 1) ? "page-item" : "page-item disabled"}>

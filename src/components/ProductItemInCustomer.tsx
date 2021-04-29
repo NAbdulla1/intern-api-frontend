@@ -4,7 +4,7 @@ import React, {useState} from "react";
 import getUser from "../user_and_token/GetUser";
 import {createOrder} from "../services/createOrder";
 
-const ProductItem = (props: {
+const ProductItemInCustomer = (props: {
     product: Product,
     deleteProduct: Function,
     updProdListener: Function,
@@ -23,13 +23,14 @@ const ProductItem = (props: {
 
     return (
         <>
-            <ProductCreateUpdateModal prod={props.product} show={showProductUpdateModal} setShow={setShowProductUpdateModal}
+            <ProductCreateUpdateModal prod={props.product} show={showProductUpdateModal}
+                                      setShow={setShowProductUpdateModal}
                                       createOrUpdateProduct={props.updProdListener} isUpdate={true}/>
             <div className={"row mx-1 my-2 border-secondary border rounded"}>
                 <div className={"col-3 p-0 m-auto"}>
-                    <img src={props.product.imageUrl} className={'w-100'} alt="product"/>
+                    <img src={props.product.imageUrl} style={{width: '10vw', padding: '1vw'}} alt="product"/>
                 </div>
-                <div className={"col-8 flex-column align-items-start"}>
+                <div className={"col-8 flex-column align-items-start border-left"}>
                     <h4>{props.product.name}</h4>
                     <small>Price: {props.product.price}/-</small>
                     <small className={'ml-3'}>Category: {props.product.category}</small>
@@ -66,7 +67,7 @@ const ProductItem = (props: {
                     </div>
                     : <span style={{cursor: "pointer"}} onClick={(e) => {
                         e.preventDefault();
-                        createNewOrder();
+                        if (window.confirm("Do you want to buy this product?")) createNewOrder();
                     }} className={'material-icons my-auto mr-1 btn btn-outline-primary font-weight-bolder'}
                             data-toggle="tooltip" data-placement="right" title="Buy This Product">
                     check
@@ -77,4 +78,4 @@ const ProductItem = (props: {
     );
 };
 
-export default ProductItem;
+export default ProductItemInCustomer;
