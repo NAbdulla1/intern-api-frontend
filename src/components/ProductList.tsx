@@ -8,7 +8,7 @@ import ProductCreateUpdateModal from "./ProductCreateUpdateModal";
 import getUser from "../user_and_token/GetUser";
 import URLParameter from "../models/URLParameter";
 import Filters from "./Filters";
-import usePageSize from "../usePageSize";
+import usePageSize from "../custom_hooks/usePageSize";
 
 const ProductList = () => {
     const [productList, setProductList] = useState<Product[]>();
