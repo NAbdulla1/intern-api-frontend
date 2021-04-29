@@ -152,14 +152,16 @@ const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, c
                     </div>
                     <div className={"form-group"}>
                         <label>Product Category</label>
-                        <DynamicSelect placeholder={'Select Category'} disabled={undefined}
-                                       value={props.isUpdate ? new CategoryOption(product.category, product.category) : undefined}
-                                       changeListener={(newVal: string) => setCategory(newVal)}
-                                       className={''}/>
+                        <div className={'ml-2 mr-3'}>
+                            <DynamicSelect placeholder={'Select Category'} disabled={undefined}
+                                           value={props.isUpdate ? new CategoryOption(product.category, product.category) : undefined}
+                                           changeListener={(newVal: string) => setCategory(newVal)}/>
+                        </div>
                     </div>
                     <div className={"form-group"}>
                         <label>Product Price</label>
-                        <input name={'price'} required step={0.001} type={'number'} className={'form-control form-control-range'}
+                        <input name={'price'} required step={0.001} type={'number'}
+                               className={'form-control form-control-range'}
                                value={price}
                                onChange={event => setPrice(event.target.value)}/>
                     </div>

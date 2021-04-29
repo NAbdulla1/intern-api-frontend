@@ -1,6 +1,5 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
-import URLParameter from "../models/URLParameter";
 
 export function getCategoriesLike(pattern: string) {
     return fetch(`/api/products/category.php?pattern=${pattern}`, {
@@ -12,7 +11,7 @@ export function getCategoriesLike(pattern: string) {
     }).then(async (resp) => {
         if (!resp.ok) throw new Error((await resp.json())['message']);
         return await resp.json();
-    }, (reason) => {
+    }, (_) => {
         handlePromiseRejected();
     });
 }
