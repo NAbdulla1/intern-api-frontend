@@ -21,7 +21,7 @@ const ProductCreateUpdateModal = (props: {
 
             >
                 <ModalHeader>
-                    <ModalTitle>Update Product</ModalTitle>
+                    <ModalTitle>{props.isUpdate ? 'Update' : 'Create'} Product</ModalTitle>
                     <Button className={'text-dark border-0 font-weight-bolder bg-transparent'} onClick={handleClose}>
                         &times;
                     </Button>

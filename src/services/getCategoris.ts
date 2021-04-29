@@ -2,13 +2,8 @@ import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler"
 import getStoredToken from "../user_and_token/GetToken";
 import URLParameter from "../models/URLParameter";
 
-export function getProducts(urlParams: URLParameter[]) {
-    let queryParam = "";
-    if (urlParams.length > 0) {
-        queryParam =
-            "?" + urlParams.map(value => `${value.key}=${value.value}`).join("&");
-    }
-    return fetch(`/api/products/get-all.php${queryParam}`, {
+export function getCategoriesLike(pattern: string) {
+    return fetch(`/api/products/category.php?pattern=${pattern}`, {
         method: "GET",
         headers: {
             'Content-type': 'application/json; charset=utf-8',

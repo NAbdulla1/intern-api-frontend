@@ -7,7 +7,7 @@ import {deleteProductService} from "../services/deleteProduct";
 import ProductCreateUpdateModal from "./ProductCreateUpdateModal";
 import getUser from "../user_and_token/GetUser";
 import URLParameter from "../models/URLParameter";
-import Filters from "./filters";
+import Filters from "./Filters";
 
 const ProductList = () => {
     const [productList, setProductList] = useState<Product[]>();
@@ -77,15 +77,16 @@ const ProductList = () => {
             {error.length > 0 ? <Alert className={'my-2'} onDismiss={() => setError("")}
                                        dismissable={true} color={"danger"}>{error}</Alert> : ""}
 
-            <div className={'row justify-content-end pr-3 pl-1 align-items-center'}>
-                <Filters filtering={filtering} slpf={setPriceLowFilter} shpf={setPriceHighFilter}
-                         spsf={setPageSizeFilter} scf={setCategoryFilter}/>
-                {getUser()?.role === 'admin' &&
+            <Filters filtering={filtering} slpf={setPriceLowFilter} shpf={setPriceHighFilter}
+                     spsf={setPageSizeFilter} scf={setCategoryFilter}/>
+
+            {getUser()?.role === 'admin' && <div className={'row justify-content-end pr-3 pl-1 align-items-center'}>
                 <Button style={{maxWidth: '20%'}} onClick={() => setShowAddProductModal(true)}
-                        className={'btn-sm mt-1 d-inline-flex align-items-center'}>
+                        className={'btn-sm d-inline-flex align-items-center'}>
                     <span className={'material-icons'}>add</span> Add Product
-                </Button>}
-            </div>
+                </Button>
+            </div>}
+
             {
                 productList !== undefined ? productList.map((product, index) =>
                         <ProductItem key={index}

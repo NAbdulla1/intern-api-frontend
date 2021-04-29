@@ -6,6 +6,8 @@ import {deleteImageService} from "../services/deleteImage.";
 import assert from "assert";
 import {updateProductService} from "../services/updateProduct";
 import {createProductService} from "../services/createProduct";
+import DynamicSelect from "./DynamicSelect";
+import CategoryOption from "../models/CategoryOption";
 
 
 const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, closeModal: Function, createOrUpdateProductCallBack: Function }) => {
@@ -150,14 +152,14 @@ const ProductCreateUpdateForm = (props: { product: Product, isUpdate: boolean, c
                     </div>
                     <div className={"form-group"}>
                         <label>Product Category</label>
-                        <input name={'category'} required minLength={1} maxLength={20} type={'text'}
-                               className={'form-control'}
-                               value={category}
-                               onChange={event => setCategory(event.target.value)}/>
+                        <DynamicSelect placeholder={'Select Category'} disabled={undefined}
+                                       value={props.isUpdate ? new CategoryOption(product.category, product.category) : undefined}
+                                       changeListener={(newVal: string) => setCategory(newVal)}
+                                       className={''}/>
                     </div>
                     <div className={"form-group"}>
                         <label>Product Price</label>
-                        <input name={'price'} required step={0.001} type={'number'} className={'form-control-range'}
+                        <input name={'price'} required step={0.001} type={'number'} className={'form-control form-control-range'}
                                value={price}
                                onChange={event => setPrice(event.target.value)}/>
                     </div>
