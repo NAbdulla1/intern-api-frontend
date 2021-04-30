@@ -9,18 +9,25 @@ import OrderTable from "./OrderTable";
 
 const OrderList = () => {
     const [orderList, setOrderList] = useState<Order[]>();
+    const [orderCount, setOrderCount] = useState<number>(1);
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
+    const [pageNum, setPageNum] = useState(1);
+    const [pageSize, setPageSize] = useState(3);
+
+    let totalPages = Math.floor((orderCount + pageSize - 1) / pageSize);
+
     useEffect(() => {
-        getOrders()
+        getOrders(pageNum, pageSize)
             .then((orders) => {
+                setOrderCount(orders['count']);
                 orders = orders['orders'];
                 const list: Order[] = orders.map((order: any) => order);
                 setOrderList(list);
             }).catch((reason) => {
             setError(reason);
         });
-    }, []);
+    }, [pageNum, pageSize]);
 
     function orderUpdated(updOrder: Order) {
         setOrderList(orderList?.map(order => {
@@ -50,7 +57,7 @@ const OrderList = () => {
                                                      order={order}
                                                      orderUpdateCallback={orderUpdated}
                                                      deleteOrderCallback={deleteOrderCallback}
-                            setSucc={setSuccess}/>
+                                                     setSucc={setSuccess}/>
                         }}/>
                         :
                         orderList?.map((order, index) => {
@@ -58,6 +65,79 @@ const OrderList = () => {
                         })
                 )
             }
+            <nav>
+                <ul className="pagination justify-content-center">
+                    <li className={(pageNum > 1) ? "page-item" : "page-item disabled"}>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setPageNum(Math.max(1, pageNum - 1))
+                            }}
+                            className="page-link"
+                            href="#"
+                            tabIndex={(pageNum <= 1) ? -1 : undefined}>Previous</a>
+                    </li>
+                    {
+                        ((function (st: number, end: number) {
+                            const arr = [];
+                            for (let pn = st; pn < end; pn++) {
+                                arr.push(<li className={"page-item"}>
+                                    <a
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setPageNum(pn)
+                                        }}
+                                        className="page-link"
+                                        href="#">{pn}</a>
+                                </li>);
+                            }
+                            return arr;
+                        })(Math.max(1, pageNum - 3), pageNum))
+                    }
+                    <li className="page-item active">
+                        <a onClick={(e) => e.preventDefault()} className="page-link" href="#">{pageNum}</a>
+                    </li>
+                    {
+                        ((function (st: number, end: number) {
+                            const arr = [];
+                            for (let pn = st; pn <= end; pn++) {
+                                arr.push(<li className={"page-item"}>
+                                    <a
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setPageNum(pn)
+                                        }}
+                                        className="page-link"
+                                        href="#">{pn}</a>
+                                </li>);
+                            }
+                            return arr;
+                        })(pageNum + 1, Math.min(pageNum + 3, totalPages)))
+                    }
+
+                    <li className={(pageNum >= totalPages) ? "page-item disabled" : "page-item"}>
+                        <a
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setPageNum(pageNum + 1)
+                            }}
+                            className="page-link"
+                            href="#"
+                            tabIndex={(pageNum === totalPages) ? -1 : undefined}>Next</a>
+                    </li>
+                </ul>
+            </nav>
+            <div className={'form-inline justify-content-center'}>
+                <label>Select Page Size </label>
+            <select className={'ml-2 form-control'} value={pageSize} onChange={e => setPageSize(parseInt(e.target.value))}>
+                <option value={1}>1</option>
+                <option value={3}>3</option>
+                <option value={7}>7</option>
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+            </select>
+            </div>
         </div>
     );
 }
