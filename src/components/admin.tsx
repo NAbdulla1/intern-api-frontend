@@ -9,9 +9,8 @@ import LeftPanelLink from "./LeftPanelLink";
 import UserList from "./UserList";
 
 const AdminHome = () => {
-    const path = window.location.pathname;
     const userName = getUser()?.name;
-    const {token, setToken} = useToken();
+    const setToken = useToken().setToken;
     return (
         getUser() !== null && getUser()?.role === 'admin' ?
             <div>

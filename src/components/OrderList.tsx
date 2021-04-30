@@ -59,8 +59,7 @@ const OrderList = () => {
                                                      deleteOrderCallback={deleteOrderCallback}
                                                      setSucc={setSuccess}/>
                         }}/>
-                        :
-                        orderList?.map((order, index) => {
+                        : orderList?.map((order, index) => {
                             return <OrderItemInCustomer key={index} order={order} orderUpdateCallback={orderUpdated}/>
                         })
                 )
@@ -68,47 +67,39 @@ const OrderList = () => {
             <nav>
                 <ul className="pagination justify-content-center">
                     <li className={(pageNum > 1) ? "page-item" : "page-item disabled"}>
-                        <a
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setPageNum(Math.max(1, pageNum - 1))
-                            }}
+                        <button
+                            onClick={() => setPageNum(Math.max(1, pageNum - 1))}
                             className="page-link"
-                            href="#"
-                            tabIndex={(pageNum <= 1) ? -1 : undefined}>Previous</a>
+                            type={"button"}
+                            tabIndex={(pageNum <= 1) ? -1 : undefined}>Previous
+                        </button>
                     </li>
                     {
                         ((function (st: number, end: number) {
                             const arr = [];
                             for (let pn = st; pn < end; pn++) {
-                                arr.push(<li className={"page-item"}>
-                                    <a
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setPageNum(pn)
-                                        }}
+                                arr.push(<li key={pn} className={"page-item"}>
+                                    <button
+                                        onClick={() => setPageNum(pn)}
                                         className="page-link"
-                                        href="#">{pn}</a>
+                                        type={'button'}>{pn}</button>
                                 </li>);
                             }
                             return arr;
                         })(Math.max(1, pageNum - 3), pageNum))
                     }
                     <li className="page-item active">
-                        <a onClick={(e) => e.preventDefault()} className="page-link" href="#">{pageNum}</a>
+                        <button className="page-link" type={'button'}>{pageNum}</button>
                     </li>
                     {
                         ((function (st: number, end: number) {
                             const arr = [];
                             for (let pn = st; pn <= end; pn++) {
-                                arr.push(<li className={"page-item"}>
-                                    <a
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setPageNum(pn)
-                                        }}
+                                arr.push(<li key={pn} className={"page-item"}>
+                                    <button
+                                        onClick={() => setPageNum(pn)}
                                         className="page-link"
-                                        href="#">{pn}</a>
+                                        type={'button'}>{pn}</button>
                                 </li>);
                             }
                             return arr;
@@ -116,27 +107,26 @@ const OrderList = () => {
                     }
 
                     <li className={(pageNum >= totalPages) ? "page-item disabled" : "page-item"}>
-                        <a
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setPageNum(pageNum + 1)
-                            }}
+                        <button
+                            onClick={() => setPageNum(pageNum + 1)}
                             className="page-link"
-                            href="#"
-                            tabIndex={(pageNum === totalPages) ? -1 : undefined}>Next</a>
+                            type={"button"}
+                            tabIndex={(pageNum === totalPages) ? -1 : undefined}>Next
+                        </button>
                     </li>
                 </ul>
             </nav>
             <div className={'form-inline justify-content-center'}>
                 <label>Select Page Size </label>
-            <select className={'ml-2 form-control'} value={pageSize} onChange={e => setPageSize(parseInt(e.target.value))}>
-                <option value={1}>1</option>
-                <option value={3}>3</option>
-                <option value={7}>7</option>
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-            </select>
+                <select className={'ml-2 form-control'} value={pageSize}
+                        onChange={e => setPageSize(parseInt(e.target.value))}>
+                    <option value={1}>1</option>
+                    <option value={3}>3</option>
+                    <option value={7}>7</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                </select>
             </div>
         </div>
     );

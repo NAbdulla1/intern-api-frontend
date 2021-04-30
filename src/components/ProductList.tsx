@@ -1,7 +1,7 @@
 import Product from "../models/Product";
 import {useEffect, useState} from "react";
 import {getProducts} from "../services/getProducts";
-import {Alert, Button} from "bootstrap-react";
+import {Alert} from "bootstrap-react";
 import ProductItemInCustomer from "./ProductItemInCustomer";
 import {deleteProductService} from "../services/deleteProduct";
 import ProductCreateUpdateModal from "./ProductCreateUpdateModal";
@@ -23,17 +23,17 @@ const ProductList = () => {
     const [filtering, setFiltering] = useState<boolean>(false);
     const {pageSize: pageSizeFilter, setPageSize: setPageSizeFilter} = usePageSize(10);
 
-    function buildParams() {
-        const params: URLParameter[] = [];
-        if (priceLowFilter > 0.0) params.push(new URLParameter('price_low', priceLowFilter));
-        if (priceHighFilter < 1000000000000000.0) params.push(new URLParameter('price_high', priceHighFilter));
-        if (pageFilter !== 1) params.push(new URLParameter('page', pageFilter));
-        if (pageSizeFilter !== 10) params.push(new URLParameter('page_size', pageSizeFilter));
-        if (categoryFilter.length > 0) params.push(new URLParameter('category', categoryFilter));
-        return params;
-    }
-
     useEffect(() => {
+        function buildParams() {
+            const params: URLParameter[] = [];
+            if (priceLowFilter > 0.0) params.push(new URLParameter('price_low', priceLowFilter));
+            if (priceHighFilter < 1000000000000000.0) params.push(new URLParameter('price_high', priceHighFilter));
+            if (pageFilter !== 1) params.push(new URLParameter('page', pageFilter));
+            if (pageSizeFilter !== 10) params.push(new URLParameter('page_size', pageSizeFilter));
+            if (categoryFilter.length > 0) params.push(new URLParameter('category', categoryFilter));
+            return params;
+        }
+
         getProducts(buildParams())
             .then((products) => {
                 products = products['products'];
@@ -86,10 +86,10 @@ const ProductList = () => {
                                        dismissable={true} color={"danger"}>{error}</Alert> : ""}
 
             {getUser()?.role === 'admin' &&
-            <Button style={{maxWidth: '20%', float:'right'}} onClick={() => setShowAddProductModal(true)}
+            <button style={{maxWidth: '20%', float: 'right'}} onClick={() => setShowAddProductModal(true)}
                     className={'btn-sm d-inline-flex align-items-center'}>
                 <span className={'material-icons'}>add</span> Add Product
-            </Button>
+            </button>
             }
             <div className={'clearfix'}/>
 
@@ -116,27 +116,23 @@ const ProductList = () => {
             <nav>
                 <ul className="pagination justify-content-center">
                     <li className={(pageFilter > 1) ? "page-item" : "page-item disabled"}>
-                        <a
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setPageFilter(Math.max(1, pageFilter - 1))
-                            }}
+                        <button
+                            onClick={() => setPageFilter(Math.max(1, pageFilter - 1))}
                             className="page-link"
-                            href="#"
-                            tabIndex={(pageFilter <= 1) ? -1 : undefined}>Previous</a>
+                            type={'button'}
+                            tabIndex={(pageFilter <= 1) ? -1 : undefined}>Previous
+                        </button>
                     </li>
                     <li className="page-item active">
-                        <a onClick={(e) => e.preventDefault()} className="page-link" href="#">{pageFilter}</a>
+                        <button className="page-link" type={"button"}>{pageFilter}</button>
                     </li>
                     <li className={(productList === undefined || productList.length === 0 || productList.length < pageSizeFilter) ? "page-item disabled" : "page-item"}>
-                        <a
-                            onClick={(e) => {
-                                e.preventDefault();
-                                setPageFilter(pageFilter + 1)
-                            }}
+                        <button
+                            onClick={() => setPageFilter(pageFilter + 1)}
                             className="page-link"
-                            href="#"
-                            tabIndex={(productList === undefined || productList.length === 0 || productList.length < pageSizeFilter) ? -1 : undefined}>Next</a>
+                            type={"button"}
+                            tabIndex={(productList === undefined || productList.length === 0 || productList.length < pageSizeFilter) ? -1 : undefined}>Next
+                        </button>
                     </li>
                 </ul>
             </nav>

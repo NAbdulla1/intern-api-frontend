@@ -2,7 +2,6 @@ import {Link, useLocation} from "react-router-dom";
 
 const LeftPanelLink = (p: { href: string, icon: string, text: string }) => {
     const path = useLocation();
-    console.log(path.pathname);
     const parts = p.href.split('/')
     const isActive = path.pathname.includes(parts[parts.length - 1]) || (p.text.toLowerCase() === 'products' && path.pathname === '/admin');
 
