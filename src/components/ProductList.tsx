@@ -87,7 +87,7 @@ const ProductList = () => {
 
             {getUser()?.role === 'admin' &&
             <button style={{maxWidth: '20%', float: 'right'}} onClick={() => setShowAddProductModal(true)}
-                    className={'btn-sm d-inline-flex align-items-center'}>
+                    className={'btn btn-primary btn-sm d-inline-flex align-items-center'}>
                 <span className={'material-icons'}>add</span> Add Product
             </button>
             }
