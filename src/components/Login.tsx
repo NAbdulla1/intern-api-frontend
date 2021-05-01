@@ -1,6 +1,7 @@
 import {Alert} from "bootstrap-react";
 import React, {useState} from "react";
 import {doLogin} from "../services/userLogin";
+import Signup from "./Signup";
 
 const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
     const [email, setEmail] = useState<string>();
@@ -9,6 +10,7 @@ const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
     const [emptyPassword, setEmptyPassword] = useState<boolean>(false);
     const [alertVisibility, setAlertVisibility] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
+    const [showSignUpModal, setShowSignUpModal] = useState<boolean>(false);
 
     const logInHandler = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -56,6 +58,13 @@ const Login = (props: { tokenExpired: boolean, setToken: Function }) => {
                     </div>
                     <button className={"btn btn-primary w-100 text-center"} type={"submit"}>Log In</button>
                 </form>
+
+                <button onClick={() => {
+                    setShowSignUpModal(true)
+                }} className={"mt-4 btn btn-secondary w-100 text-center"}
+                        type={"button"}>Sign Up
+                </button>
+                <Signup showSignup={showSignUpModal} setShowModal={setShowSignUpModal}/>
             </div>
         </div>
     )
