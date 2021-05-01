@@ -41,6 +41,7 @@ const ProductList = () => {
         getProducts(buildParams())
             .then((products) => {
                 setProductCount(products['count']);
+                setPageFilter(Math.max(1, Math.min(pageFilter, totalPages)));
                 products = products['products'];
                 const list: Product[] = products.map((product: any) => product);
                 setProductList(list);

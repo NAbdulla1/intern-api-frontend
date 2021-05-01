@@ -22,6 +22,7 @@ const OrderList = () => {
         getOrders(pageNum, pageSize)
             .then((orders) => {
                 setOrderCount(orders['count']);
+                setPageNum(Math.max(1, Math.min(pageNum, totalPages)));
                 orders = orders['orders'];
                 const list: Order[] = orders.map((order: any) => order);
                 setOrderList(list);
