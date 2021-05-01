@@ -1,6 +1,7 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
 import URLParameter from "../models/URLParameter";
+import Config from "../Config";
 
 export function getProducts(urlParams: URLParameter[]) {
     let queryParam = "";
@@ -8,7 +9,7 @@ export function getProducts(urlParams: URLParameter[]) {
         queryParam =
             "?" + urlParams.map(value => `${value.key}=${value.value}`).join("&");
     }
-    return fetch(`/api/products/get-all.php${queryParam}`, {
+    return fetch(`${Config.base_url}/api/products/get-all.php${queryParam}`, {
         method: "GET",
         headers: {
             'Content-type': 'application/json; charset=utf-8',

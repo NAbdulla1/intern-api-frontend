@@ -1,8 +1,9 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
+import Config from "../Config";
 
 export function deleteOrderService(id: number) {
-    return fetch(`/api/orders/delete.php`, {
+    return fetch(`${Config.base_url}/api/orders/delete.php`, {
         method: "DELETE",
         body: JSON.stringify({"id": id}),
         headers: {

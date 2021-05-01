@@ -1,8 +1,9 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
+import Config from "../Config";
 
 export function createOrder(product_sku: string) {
-    return fetch(`/api/orders/create.php`, {
+    return fetch(`${Config.base_url}/api/orders/create.php`, {
         method: "POST",
         body: JSON.stringify({'product_sku': product_sku}),
         headers: {

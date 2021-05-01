@@ -1,8 +1,9 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
+import Config from "../Config";
 
 export function updateOrderStatus(id: number, status: string) {
-    return fetch(`/api/orders/update.php`, {
+    return fetch(`${Config.base_url}/api/orders/update.php`, {
         method: "PATCH",
         body: JSON.stringify({'id':id, 'status':status}),
         headers: {

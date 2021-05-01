@@ -1,8 +1,9 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
+import Config from "../Config";
 
 export function deleteProductService(sku: string) {
-    return fetch(`/api/products/delete.php?sku=${sku}`, {
+    return fetch(`${Config.base_url}/api/products/delete.php?sku=${sku}`, {
         method: "DELETE",
         headers: {
             'Content-type': 'application/json; charset=utf-8',

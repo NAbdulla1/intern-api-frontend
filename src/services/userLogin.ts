@@ -1,7 +1,8 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
+import Config from "../Config";
 
 export function doLogin(email: string, password: string) {
-    return fetch(`/api/users/login.php`, {
+    return fetch(`${Config.base_url}/api/users/login.php`, {
         method: 'POST',
         headers: {
             "Content-type": "application/json; charset=utf-8"

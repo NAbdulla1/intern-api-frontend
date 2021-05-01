@@ -1,8 +1,9 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
+import Config from "../Config";
 
 export function getOrders(page: number, pageSize: number) {
-    return fetch(`/api/orders/get.php?page=${page}&page_size=${pageSize}`, {
+    return fetch(`${Config.base_url}/api/orders/get.php?page=${page}&page_size=${pageSize}`, {
         method: "GET",
         headers: {
             'Content-type': 'application/json; charset=utf-8',

@@ -1,8 +1,9 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
+import Config from "../Config";
 
 export function deleteImageService(url: string) {
-    return fetch(`/api/products/upload-image/delete.php`, {
+    return fetch(`${Config.base_url}/api/products/upload-image/delete.php`, {
         method: "DELETE",
         body: JSON.stringify({'url': url}),
         headers: {

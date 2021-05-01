@@ -1,9 +1,10 @@
 import handlePromiseRejected from "../exception_handlers/PromiseRejectedHandler";
 import getStoredToken from "../user_and_token/GetToken";
 import Product from "../models/Product";
+import Config from "../Config";
 
 export function updateProductService(product: Product) {
-    return fetch(`/api/products/update.php`, {
+    return fetch(`${Config.base_url}/api/products/update.php`, {
         method: "PATCH",
         body: JSON.stringify(product),
         headers: {
