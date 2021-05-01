@@ -6,6 +6,7 @@ import {Alert} from "bootstrap-react";
 import getUser from "../user_and_token/GetUser";
 import OrderItemInAdmin from "./OrderItemInAdmin";
 import OrderTable from "./OrderTable";
+import PageNavigator from "./PageNavigator";
 
 const OrderList = () => {
     const [orderList, setOrderList] = useState<Order[]>();
@@ -64,58 +65,8 @@ const OrderList = () => {
                         })
                 )
             }
-            <nav>
-                <ul className="pagination justify-content-center">
-                    <li className={(pageNum > 1) ? "page-item" : "page-item disabled"}>
-                        <button
-                            onClick={() => setPageNum(Math.max(1, pageNum - 1))}
-                            className="page-link"
-                            type={"button"}
-                            tabIndex={(pageNum <= 1) ? -1 : undefined}>Previous
-                        </button>
-                    </li>
-                    {
-                        ((function (st: number, end: number) {
-                            const arr = [];
-                            for (let pn = st; pn < end; pn++) {
-                                arr.push(<li key={pn} className={"page-item"}>
-                                    <button
-                                        onClick={() => setPageNum(pn)}
-                                        className="page-link"
-                                        type={'button'}>{pn}</button>
-                                </li>);
-                            }
-                            return arr;
-                        })(Math.max(1, pageNum - 3), pageNum))
-                    }
-                    <li className="page-item active">
-                        <button className="page-link" type={'button'}>{pageNum}</button>
-                    </li>
-                    {
-                        ((function (st: number, end: number) {
-                            const arr = [];
-                            for (let pn = st; pn <= end; pn++) {
-                                arr.push(<li key={pn} className={"page-item"}>
-                                    <button
-                                        onClick={() => setPageNum(pn)}
-                                        className="page-link"
-                                        type={'button'}>{pn}</button>
-                                </li>);
-                            }
-                            return arr;
-                        })(pageNum + 1, Math.min(pageNum + 3, totalPages)))
-                    }
+            <PageNavigator currentPageNumber={pageNum} setPageNum={setPageNum} totalPages={totalPages}/>
 
-                    <li className={(pageNum >= totalPages) ? "page-item disabled" : "page-item"}>
-                        <button
-                            onClick={() => setPageNum(pageNum + 1)}
-                            className="page-link"
-                            type={"button"}
-                            tabIndex={(pageNum === totalPages) ? -1 : undefined}>Next
-                        </button>
-                    </li>
-                </ul>
-            </nav>
             <div className={'form-inline justify-content-center'}>
                 <label>Select Page Size </label>
                 <select className={'ml-2 form-control'} value={pageSize}

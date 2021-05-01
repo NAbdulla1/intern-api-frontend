@@ -11,6 +11,7 @@ import Filters from "./Filters";
 import usePageSize from "../custom_hooks/usePageSize";
 import ProductItemInAdmin from "./ProductItemInAdmin";
 import {ProductTable} from "./ProductTable";
+import PageNavigator from "./PageNavigator";
 
 const ProductList = () => {
     const [productList, setProductList] = useState<Product[]>();
@@ -21,21 +22,25 @@ const ProductList = () => {
     const [categoryFilter, setCategoryFilter] = useState<string>("");
     const [pageFilter, setPageFilter] = useState<number>(1);
     const [filtering, setFiltering] = useState<boolean>(false);
-    const {pageSize: pageSizeFilter, setPageSize: setPageSizeFilter} = usePageSize(10);
+    const {pageSizeFilter, setPageSizeFilter} = usePageSize(10);
+    const [productCount, setProductCount] = useState<number>(1);
+
+    let totalPages = Math.floor((productCount + pageSizeFilter - 1) / pageSizeFilter);
 
     useEffect(() => {
         function buildParams() {
             const params: URLParameter[] = [];
             if (priceLowFilter > 0.0) params.push(new URLParameter('price_low', priceLowFilter));
             if (priceHighFilter < 1000000000000000.0) params.push(new URLParameter('price_high', priceHighFilter));
-            if (pageFilter !== 1) params.push(new URLParameter('page', pageFilter));
-            if (pageSizeFilter !== 10) params.push(new URLParameter('page_size', pageSizeFilter));
+            if (pageFilter > 1) params.push(new URLParameter('page', pageFilter));
+            if (pageSizeFilter !== 10 && !(pageSizeFilter <= 0)) params.push(new URLParameter('page_size', pageSizeFilter));
             if (categoryFilter.length > 0) params.push(new URLParameter('category', categoryFilter));
             return params;
         }
 
         getProducts(buildParams())
             .then((products) => {
+                setProductCount(products['count']);
                 products = products['products'];
                 const list: Product[] = products.map((product: any) => product);
                 setProductList(list);
@@ -43,7 +48,7 @@ const ProductList = () => {
             }).catch((reason) => {
             setError(reason);
         });
-    }, [priceLowFilter, priceHighFilter, categoryFilter, pageFilter, pageSizeFilter]);
+    }, [priceLowFilter, priceHighFilter, categoryFilter, pageFilter, pageSizeFilter, productCount]);
 
     function deleteProduct(sku: string) {
         deleteProductService(sku)
@@ -113,29 +118,7 @@ const ProductList = () => {
                     : <Alert className={'my-3'} color={"info"}>No Product to be shown</Alert>
             }
 
-            <nav>
-                <ul className="pagination justify-content-center">
-                    <li className={(pageFilter > 1) ? "page-item" : "page-item disabled"}>
-                        <button
-                            onClick={() => setPageFilter(Math.max(1, pageFilter - 1))}
-                            className="page-link"
-                            type={'button'}
-                            tabIndex={(pageFilter <= 1) ? -1 : undefined}>Previous
-                        </button>
-                    </li>
-                    <li className="page-item active">
-                        <button className="page-link" type={"button"}>{pageFilter}</button>
-                    </li>
-                    <li className={(productList === undefined || productList.length === 0 || productList.length < pageSizeFilter) ? "page-item disabled" : "page-item"}>
-                        <button
-                            onClick={() => setPageFilter(pageFilter + 1)}
-                            className="page-link"
-                            type={"button"}
-                            tabIndex={(productList === undefined || productList.length === 0 || productList.length < pageSizeFilter) ? -1 : undefined}>Next
-                        </button>
-                    </li>
-                </ul>
-            </nav>
+            <PageNavigator currentPageNumber={pageFilter} setPageNum={setPageFilter} totalPages={totalPages}/>
         </div>
     )
 }

@@ -4,7 +4,7 @@ const usePageSize = (initial: number) => {
     const pageSizeKey = 'prod_page_size';
     const getPageSize = () => {
         let ps = sessionStorage.getItem(pageSizeKey);
-        return parseInt(ps ?? '0') ?? initial;
+        return parseInt(ps ?? '10') ?? initial;
     }
 
     const [pageSize, setPageSize] = useState(getPageSize);
@@ -16,8 +16,8 @@ const usePageSize = (initial: number) => {
     }
 
     return {
-        'pageSize': pageSize,
-        'setPageSize': storePageSize
+        pageSizeFilter: pageSize,
+        setPageSizeFilter: storePageSize
     }
 }
 
